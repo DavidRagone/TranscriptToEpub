@@ -36,7 +36,7 @@ def scrape_page(url):
         print(f"Failed to retrieve the webpage at {url}. Status code: {response.status_code}")
         return None
 
-def create_json_for(base_url):
+def create_json_for(season, base_url):
     # Send an HTTP request to the base URL
     response = requests.get(base_url)
 
@@ -69,7 +69,7 @@ def create_json_for(base_url):
                 all_scraped_data[page_title] = page_data
 
         # Write the scraped data to a JSON file
-        with open(url_to_title(base_url) + '.json', 'w', encoding='utf-8') as f:
+        with open(season + ": " + url_to_title(base_url) + '.json', 'w', encoding='utf-8') as f:
             json.dump(all_scraped_data, f, ensure_ascii=False, indent=4)
 
         # Now you have all the scraped data in the `all_scraped_data` dictionary
@@ -80,16 +80,16 @@ def create_json_for(base_url):
 
 # The base URL for the main page with links
 urls = [
-    'https://elpidio.org/the-english-revolution/',
-    'https://elpidio.org/the-american-revolution/',
-    'https://elpidio.org/the-french-revolution/',
-    'https://elpidio.org/the-haitian-revolution/',
-    'https://elpidio.org/the-latin-american-revolutions/',
-    'https://elpidio.org/the-july-revolution/'
+    ("Season 1", 'https://elpidio.org/the-english-revolution/'),
+    ("Season 2", 'https://elpidio.org/the-american-revolution/'),
+    ("Season 3", 'https://elpidio.org/the-french-revolution/'),
+    ("Season 4", 'https://elpidio.org/the-haitian-revolution/'),
+    ("Season 5", 'https://elpidio.org/the-latin-american-revolutions/'),
+    ("Season 6", 'https://elpidio.org/the-july-revolution/')
 ] # Note: missing seasons 7 (revolutions of 1848), 8 (paris commune), 9 (mexican revolution), 10 (russian revolution part 1), and 11 (russian revolution part 2)
 
-for url in urls:
-    create_json_for(url)
+for season, url in urls:
+    create_json_for(season, url)
 
 # # Example of accessing the data
 # for page_title, content in all_scraped_data.items():
