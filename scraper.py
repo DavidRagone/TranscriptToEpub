@@ -79,9 +79,17 @@ def create_json_for(base_url):
         print(f"Failed to retrieve the main webpage. Status code: {response.status_code}")
 
 # The base URL for the main page with links
-first_url = 'https://elpidio.org/the-english-revolution/'
+urls = [
+    'https://elpidio.org/the-english-revolution/',
+    'https://elpidio.org/the-american-revolution/',
+    'https://elpidio.org/the-french-revolution/',
+    'https://elpidio.org/the-haitian-revolution/',
+    'https://elpidio.org/the-latin-american-revolutions/',
+    'https://elpidio.org/the-july-revolution/'
+] # Note: missing seasons 7 (revolutions of 1848), 8 (paris commune), 9 (mexican revolution), 10 (russian revolution part 1), and 11 (russian revolution part 2)
 
-create_json_for(first_url)
+for url in urls:
+    create_json_for(url)
 
 # # Example of accessing the data
 # for page_title, content in all_scraped_data.items():
