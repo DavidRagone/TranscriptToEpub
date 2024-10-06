@@ -29,7 +29,7 @@ def scrape_page(url):
         page_content['h1'] = h1_tag.get_text() if h1_tag else None
 
         # Extract all p tags and store them in a list
-        page_content['paragraphs'] = [p.get_text() for p in soup.find_all('p')]
+        page_content['paragraphs'] = [p.get_text() for p in soup.find_all('p')[0:-6]]
 
         return page_content
     else:
