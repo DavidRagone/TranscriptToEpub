@@ -12,15 +12,19 @@ def create_epub_from_json(json_file, output_epub_file):
 
     # Set metadata for the EPUB book
     title = json_file.rsplit('.', 1)[0]
+    book.set_identifier(title)
     book.set_title(title)
     book.set_language('en')
+    book.add_author('Mike Duncan')
 
     # Add chapters for each episode in the JSON data
+    chapters = []
     for episode_title, content in data.items():
         # Create a new chapter for each episode
-        chapter = epub.EpubHtml(title=episode_title, file_name=f"{episode_title}.xhtml")
+        chapter = epub.EpubHtml(title=episode_title, file_name=f"{episode_title}.xhtml", lang='en')
+
         # Prepare content for the chapter
-        h1 = content.get('h1', episode_title)
+        h1 = episode_title
         paragraphs = content.get('paragraphs', [])
         
         # Create the HTML content for the chapter
@@ -32,26 +36,20 @@ def create_epub_from_json(json_file, output_epub_file):
 
         # Add chapter to the book
         book.add_item(chapter)
+        chapters.append(chapter)
 
-        # # Add chapter to the spine (the reading order)
-        # book.add_item(epub.EpubNav())
+    # Table of Contents
+    book.toc = chapters
 
     # Define the spine (reading order)
-    book.spine = ['nav'] + list(book.get_items_of_type(epub.EpubHtml))
+    book.spine = ['nav'] + chapters#list(book.get_items_of_type(epub.EpubHtml))
 
     # Add a navigation file to the book
     book.add_item(epub.EpubNav())
+    book.add_item(epub.EpubNcx())
 
     # Write the EPUB file to disk
-    epub.write_epub(output_epub_file, book)
-
-# # Example usage
-# json_file = 'scraped_data.json'  # Input JSON file
-# output_epub_file = 'episodes_collection.epub'  # Output EPUB file
-# create_epub_from_json(json_file, output_epub_file)
-
-# print(f"EPUB file '{output_epub_file}' created successfully!")
-
+    epub.write_epub(output_epub_file, book, {})
 
 # Directory containing the script (and the .json files)
 current_directory = os.path.dirname(os.path.abspath(__file__))
